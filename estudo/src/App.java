@@ -1,13 +1,30 @@
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import entities.Product;
 import entities.Triangle;
 import utils.Calculator;
 
 public class App {
-    public static void atividade1(){
+
+    public static void formatacaoTexto(){
         String product1 = "Computer";
         String product2 = "Office desk";
 
@@ -34,7 +51,8 @@ public class App {
         Locale.setDefault(Locale.US);
         System.out.printf("Us decimal point %.3f", measure);
     }
-    public static void atividade2(){
+    
+    public static void numeroImparPar(){
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
@@ -55,7 +73,8 @@ public class App {
 
         sc.close();
     }
-    public static void atividade3(){
+    
+    public static void usoFor(){
         Scanner sc      = new Scanner(System.in);
         System.out.print("Digite quantos pares de número quer dividir: ");
         int n = sc.nextInt();
@@ -78,51 +97,8 @@ public class App {
 
         sc.close();
     }
-    public static void atividade4(){
-        String product1 = "Computer";
-        String product2 = "Office desk";
 
-        int age = 30;
-        int code = 5290;
-        char gender = 'F';
-
-        double price1 = 2100.0;
-        double price2 = 650.50;
-        double measure = 53.234567;
-
-        System.out.println("Products:");
-        System.out.printf("%s, which price is $ %.2f%n", product1, price1);
-        System.out.printf("%s, which price is $ %.2f%n", product2, price2);
-
-        System.out.println();
-
-        System.out.printf("Record: %d years old, code %d and gender: %s%n", age, code, gender);
-        
-        System.out.println();
-
-        System.out.printf("Measure with eight decimal places: %.8f%n", measure);
-        System.out.printf("Rounded (three decimal places) %.3f%n", measure);
-        Locale.setDefault(Locale.US);
-        System.out.printf("Us decimal point %.3f", measure);
-    }
-    public static void atividade5(){
-        Locale.setDefault(Locale.US);
-        Scanner sc = new Scanner(System.in);
-
-        double x, y, z;
-
-        System.out.println("Escreve a porra de dois numeros e dê enter");
-
-        x = sc.nextDouble();
-        y = sc.nextDouble();
-        
-        z = x + y;
-
-        System.out.printf("A soma dessa bagaça deu %.2f%n", z);
-
-        sc.close();
-    }
-    public static void atividade6(){
+    public static void usoBibliotecaMath(){
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
@@ -138,7 +114,8 @@ public class App {
 
         sc.close();
     }
-    public static void atividade7(){
+    
+    public static void operadoreBitBit(){
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
@@ -160,7 +137,8 @@ public class App {
 
         sc.close();
     }
-    public static void atividade8(){
+    
+    public static void formatacaoString(){
         String texto = "   abcde FGHIJ kLmNoP       ";
 
         String txt01 = texto.toLowerCase();
@@ -182,7 +160,8 @@ public class App {
         System.out.println(txt07);
         System.out.println(txt08[0]);
     }
-    public static void atividade9(){
+    
+    public static void usoClasse(){
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
@@ -196,6 +175,7 @@ public class App {
 
         sc.close();
     }
+    
     public static int max(int a, int b, int c){
         int aux;
 
@@ -211,7 +191,8 @@ public class App {
 
         return aux;
     }
-    public static void atividade10(){
+    
+    public static void instanciacaoObjetoTriangulo(){
         Scanner sc = new Scanner(System.in);
         
         Triangle x,y;
@@ -235,7 +216,26 @@ public class App {
 
         sc.close();
     }
-    public static void atividade11(){
+    
+    public static void instanciacaoObjetoCirculo(){
+        Locale.setDefault(Locale.US);
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Entre com o raio: ");
+
+        double radius = sc.nextDouble();
+
+        double c = Calculator.circunference(radius);
+
+        double v = Calculator.circunference(radius);
+
+        System.out.println("C: " + c + " V: " + v + " PI: " + Calculator.PI);
+
+        sc.close();
+        
+    }
+
+    public static void instanciacaoObjetoProduct(){
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
@@ -264,27 +264,289 @@ public class App {
 
         sc.close();
     }
-    public static void atividade12(){
+    
+    public static void vetores(){
+        Locale.setDefault(Locale.US);
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        double[] vect = new double[n];
+        for(int i=0; i<n; i++){
+            vect[i] = sc.nextDouble();
+        }
+        double sum = 0;
+        for(int i=0; i<n; i++){
+            sum += vect[i];
+        }
+        double avg = sum / n;
+        System.out.printf("Valor é %f.01%n", avg);
+        sc.close();
+    }
+
+    public static void vetoresProduct(){
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Entre com o raio: ");
+        int n = sc.nextInt();
+        Product[] vect = new Product[n];
 
-        double radius = sc.nextDouble();
+        for(int i=0; i<n; i++){
+            //gambiarra pq deu um nextInt antes, para poder dar um next string precisa fazer isso se não ele pega o valor do ENTER
+            sc.nextLine();
+            String name = sc.nextLine();
+            Double price = sc.nextDouble();
+            vect[i] = new Product(name, price); 
+        }
 
-        double c = Calculator.circunference(radius);
+        Double sum = 0.0;
+        //da de usar o próprio tamanho do vetor
+        for(int i=0; i<vect.length; i++){
+            sum += vect[i].getPrice();
+        }
 
-        double v = Calculator.circunference(radius);
+        Double avg = sum / n;
 
-        System.out.println("C: " + c + " V: " + v + " PI: " + Calculator.PI);
+        System.out.println(avg);
 
         sc.close();
-        
     }
-    public static void atividade13(){
+    
+    public static void boxinggUnboxingWrapperClasses(){
+        int x = 20;
+
+        //boxing
+        Object obj = x;
+        System.out.println(obj);
+
+        //unboxing
+        int y = (int) obj;
+        System.out.println(y);
+
+        //wrapper classes
+        Integer i = x;
+        int z = i * 2;
+        System.out.println(z);
+
+        //usando wrapper class
+        //public String name;
+        //public double price;
+        //public Integer quantity;
 
     }
+    
+    public static void foreEach(){
+        //instanciar vetor com dados
+        String[] vect = new String[] {"João", "Maria", "José", "Pedro"};
+        //percorrer vetor com for de forma diferente
+        for(String x : vect){
+            System.out.println(x);
+        }
+
+    }
+    
+    public static void listas(){
+        //instanciar lista do tipo String
+        List<String> list = new ArrayList<>();
+
+        //adicionar elementos na lista
+        list.add("Maria");
+        list.add("José");
+        list.add("Pedro");
+        list.add("João");
+
+        //adicionar elementos em uma posição especifica na lista
+        list.add(2, "Paulo");
+
+        //criar uma nova lista para filtrar somente os nomes que começam com P
+        List<String> list2 = list.stream().filter(x -> x.startsWith("P")).collect(Collectors.toList());
+
+        //remover elementos da lista
+        list.remove("Maria");
+        list.remove(1);
+        //filtrar com função lambda para remover todos que iniciam com P
+        list.removeIf(filter -> filter.startsWith("P"));
+
+        //mostrar tamanho da lista
+        System.out.println(list.size());
+        
+        //mostrar o index do elemento
+        System.out.println(list.indexOf("José"));
+
+        //mostrar elementos da lista
+        for(String x : list){
+            System.out.println(x);
+        }
+
+        //mostrar elementos da lista 2 separado por virgula
+        for(String x : list2){
+            System.out.print(x + ", ");
+        }
+        System.out.println();
+
+        //filtra o primeiro nome da lista que começa com P, caso não exista, retornar nulo
+        String first = list2.stream().filter(x -> x.startsWith("P")).findFirst().orElse(null);
+        System.out.println(first);
+        
+    }
+    
+    public static void matriz(){
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = sc.nextInt();
+        //cria uma matriz de n linhas e n colunas
+        int[][] matriz = new int[n][n];
+        //percorre a matriz
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                System.out.print("Enter a value for [ " + i + " ] [ " + j + " ]: ");
+                matriz[i][j] = sc.nextInt();
+            }
+        }
+        //mostra a matriz diagonal
+        for(int i=0;i<n;i++){
+            System.out.println(matriz[i][i] + " ");
+        }
+
+        //mostra a quantidade de numeros negativos da matriz
+        int count = 0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(matriz[i][j] < 0){
+                    count++;
+                }
+            }
+        }
+        System.out.println("The number of negative numbers is: " + count);
+
+        //mostra a quantidade de linhas da array
+        System.out.println("The number of rows is: " + matriz.length);
+        //mostra a quantidade de colunas da array
+        System.out.println("The number of columns is: " + matriz[0].length);
+
+        sc.close();
+    }
+    
+    public static void dataHora(){
+
+        //formatadores para datas
+        DateTimeFormatter frmt1 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter frmt2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH");
+        DateTimeFormatter frmt3 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(ZoneId.systemDefault());
+        DateTimeFormatter frmt4 = DateTimeFormatter.ISO_INSTANT;
+
+        //instanciar data
+        LocalDate       d01 = LocalDate.now();
+        LocalTime       d02 = LocalTime.now();
+        LocalDateTime   d03 = LocalDateTime.now();
+        Instant         d04 = Instant.now();
+        Instant         d05 = Instant.parse("2018-06-25T15:42:07Z");
+        LocalDateTime   d06 = LocalDateTime.parse("25/10/2009 15:42:07", frmt1);
+        LocalDateTime   d07 = LocalDateTime.parse("2018-10-15T15:42:07");
+        LocalDate.of(2022, 01, 30);
+
+        //imprime aas dastas
+        System.out.println(d01);
+        System.out.println(d02);
+        System.out.println(d03);
+        System.out.println(d04);
+        //por padrao o print mostra o toString() do objeto
+        System.out.println(d04.toString());
+        System.out.println(d05);
+        System.out.println(d06);
+        //imprime as datas com os formatos
+        System.out.println(d07.format(frmt2));
+        System.out.println(frmt2.format(d07));
+        System.out.println(frmt3.format(d05));
+        System.out.println(frmt4.format(d05));
+
+        //convertendo data global para local
+        LocalDateTime d08 = LocalDateTime.ofInstant(d05, ZoneId.systemDefault());
+        LocalDateTime d09 = LocalDateTime.ofInstant(d05, ZoneId.of("Portugal"));
+        System.out.println(d08);
+        System.out.println(d09);
+
+        //imprimir só partes de uma data
+        System.out.println(d01.getDayOfMonth());
+
+        //Adicionar horas e dias em data
+        LocalDateTime d10 = d03.plusHours(4);
+        System.out.println(d10);
+        
+        //adicionar dias em Instant
+        Instant d11 = d05.plus(7, ChronoUnit.DAYS);
+        System.out.println(d11);
+        
+        //Duração entre duas datas
+        Duration d12 = Duration.between(d05, d11);
+        System.out.println(d12.toDays());
+        
+        //duracao entre dates
+        Duration d13 = Duration.between(d01.atStartOfDay(), d01.atTime(23, 0));
+        System.out.println(d13.toHours());
+
+    }
+
+    public static void dataHoraLegacy() throws ParseException{
+        //estilos de datas usados antes do JAVA 8
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        sdf3.setTimeZone(TimeZone.getTimeZone("GMT"));
+        
+        Date x1 = new Date();
+        Date x2 = new Date(System.currentTimeMillis());
+        Date x3 = new Date(0L);
+        Date x4 = new Date(1000L * 60L * 60L * 5L);
+
+        Date y1 = sdf1.parse("26/06/2018");
+        Date y2 = sdf2.parse("26/06/2018 15:42:07");
+        Date y3 = Date.from(Instant.parse("2018-06-25T15:42:07Z"));
+
+        System.out.println(x1);
+        System.out.println(x2);
+        System.out.println(x3);
+        System.out.println(x4);
+        System.out.println(y1);
+        System.out.println(y2);
+        System.out.println(y3);
+        System.out.println("-----------------");
+        System.out.println(sdf2.format(x1));
+        System.out.println(sdf2.format(x2));
+        System.out.println(sdf2.format(x3));
+        System.out.println(sdf2.format(x4));
+        System.out.println(sdf2.format(y1));
+        System.out.println(sdf2.format(y2));
+        System.out.println(sdf2.format(y3));
+        System.out.println("-----------------");
+        System.out.println(sdf3.format(x1));
+        System.out.println(sdf3.format(x2));
+        System.out.println(sdf3.format(x3));
+        System.out.println(sdf3.format(x4));
+        System.out.println(sdf3.format(y1));
+        System.out.println(sdf3.format(y2));
+        System.out.println(sdf3.format(y3));
+    }
+    
+    public static void calendar(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date d = Date.from(Instant.parse("2018-06-25T15:42:07Z"));
+        System.out.println(sdf.format(d));
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.HOUR, 4);
+        d = cal.getTime();
+        System.out.println(sdf.format(d));
+
+        int minutes = cal.get(Calendar.MINUTE);
+        System.out.println("Minutes: " + minutes);
+    }
+    
+    public static void atividade(){
+        
+    }
+    
     public static void main(String[] args) throws Exception {
-        atividade11();
+        calendar();
     }
 }
