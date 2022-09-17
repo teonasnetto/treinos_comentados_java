@@ -18,12 +18,15 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
+import entities.Account;
+import entities.BussinesAccount;
 import entities.Comment;
 import entities.Department;
 import entities.HourContract;
 import entities.Order;
 import entities.Post;
 import entities.Product;
+import entities.SavingsAccount;
 import entities.Triangle;
 import entities.Worker;
 import entities.enums.OrderStatus;
@@ -624,12 +627,47 @@ public class App {
         System.out.println(p1);
 
     }
+    
+    public static void accountHeranca(){
 
+        Account acc = new Account(1001, "Halex", 0.0);
+        BussinesAccount bacc = new BussinesAccount(1002, "Joseph", 0.0, 500.0);
+
+        // UPCASTING, atribuir uma bussines account para uma versão Account
+        // ou seja, atribuir uma subclasse ser atribuido para uma superclasse
+        Account acc1 = bacc;
+        Account acc2 = new BussinesAccount(1003, "Rafa", 100.0, 1000.0);
+        Account acc3 = new SavingsAccount(1004, "Marcos", 5000.0, 0.01);
+
+        // DOWNCASTING
+        // não é aceitavel converter naturalmente uma superclasse para uma subclasee
+        //BussinesAccount acc4 = acc2; //<- Gera erro
+        BussinesAccount acc4 = (BussinesAccount)acc2;
+        acc4.loan(400.0);
+
+        // uma herança não consegue ser convertido para outro tipo de subclasse, o compilador nao reconhece
+        //BussinesAccount acc5 = (BussinesAccount)acc3; //<- Gera erro ao rodar
+
+        //checar se é uma instancia do tipo certo
+        if (acc3 instanceof BussinesAccount) {
+            BussinesAccount acc5 = (BussinesAccount)acc3;
+            acc5.loan(500);
+            System.out.println(acc5.getBalance());
+        }
+
+        if (acc3 instanceof SavingsAccount) {
+            SavingsAccount acc5 = (SavingsAccount)acc3;
+            acc5.updateBalance();
+            System.out.println("OK!");
+        }
+
+    }
+    
     public static void atividade(){
         
     }
-    
+
     public static void main(String[] args) throws Exception {
-        postComentarios();
+        accountHeranca();
     }
 }
