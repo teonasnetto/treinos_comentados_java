@@ -18,8 +18,10 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
+import entities.Order;
 import entities.Product;
 import entities.Triangle;
+import entities.enums.OrderStatus;
 import utils.Calculator;
 
 public class App {
@@ -542,11 +544,16 @@ public class App {
         System.out.println("Minutes: " + minutes);
     }
     
+    public static void enumerador(){
+        Order order = new Order(1080, new Date(), OrderStatus.PENDING_PAYMENT);
+        System.out.println(order);
+    }
+    
     public static void atividade(){
         
     }
     
     public static void main(String[] args) throws Exception {
-        calendar();
+        enumerador();
     }
 }
