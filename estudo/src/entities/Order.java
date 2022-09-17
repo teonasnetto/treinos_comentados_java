@@ -10,8 +10,6 @@ public class Order {
     private Date moment;
     private OrderStatus status;
 
-    
-
     @Override
     public String toString() {
         return "Order [id=" + id + ", moment=" + moment + ", status=" + status + "]";
