@@ -18,9 +18,11 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
+import entities.Comment;
 import entities.Department;
 import entities.HourContract;
 import entities.Order;
+import entities.Post;
 import entities.Product;
 import entities.Triangle;
 import entities.Worker;
@@ -607,11 +609,27 @@ public class App {
         sc.close();
     }
     
+    public static void postComentarios() throws ParseException{
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        Comment c1 = new Comment("Have a nice trip!");
+        Comment c2 = new Comment("Wow, nota joia!");
+
+        Post p1 = new Post(sdf.parse("21/06/2018 10:20:20"),"Traveling to new Zealand", "Tudo nota joia pra viajar!", 1);
+
+        p1.addComment(c1);
+        p1.addComment(c2);
+
+        System.out.println(p1);
+
+    }
+
     public static void atividade(){
         
     }
     
     public static void main(String[] args) throws Exception {
-        contarTrabalhador();
+        postComentarios();
     }
 }
