@@ -22,8 +22,10 @@ import entities.Account;
 import entities.BussinesAccount;
 import entities.Comment;
 import entities.Department;
+import entities.Employee;
 import entities.HourContract;
 import entities.Order;
+import entities.OutsourcedEmployee;
 import entities.Post;
 import entities.Product;
 import entities.SavingsAccount;
@@ -661,13 +663,37 @@ public class App {
             System.out.println("OK!");
         }
 
+        System.out.println(acc.toString() + " - " + acc1.toString());
+
     }
     
+    public static void polimorfismo(){
+
+        List<Employee> list = new ArrayList<>();
+
+        int n = 2;
+
+        for(int i=1; i<=n; i++) {
+           System.out.println("Era pra ter os inputs dos funcionarios aqui " + i); 
+           if (i == 1) {
+            list.add(new OutsourcedEmployee("Jose", 10, 20.0, 200.0));
+           }
+           else{
+            list.add(new Employee("Maria", 12, 25.0));
+           }
+        }
+
+        for(Employee emp: list) {
+            System.out.println(emp.getName() + " - $" + String.format("%.2f", emp.payment()));
+        }
+
+    }
+
     public static void atividade(){
         
     }
 
     public static void main(String[] args) throws Exception {
-        accountHeranca();
+        polimorfismo();
     }
 }
