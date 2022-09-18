@@ -1,6 +1,7 @@
 package entities;
 
-public class Account {
+//Adicionado abstract para não poder instanciar somente uma conta sem ser uma subclasse
+public abstract class Account {
 
     private Integer number;
     private String holder;

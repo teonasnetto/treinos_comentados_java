@@ -632,7 +632,9 @@ public class App {
     
     public static void accountHeranca(){
 
-        Account acc = new Account(1001, "Halex", 0.0);
+        //Account não pode ser instanciada, pois é abstrada para somente existir contas bussines e savings
+        //Account acc = new Account(1001, "Halex", 0.0); //<-Gera erro se deixar
+        
         BussinesAccount bacc = new BussinesAccount(1002, "Joseph", 0.0, 500.0);
 
         // UPCASTING, atribuir uma bussines account para uma versão Account
@@ -663,7 +665,7 @@ public class App {
             System.out.println("OK!");
         }
 
-        System.out.println(acc.toString() + " - " + acc1.toString());
+        System.out.println(acc1.toString());
 
     }
     
