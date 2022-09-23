@@ -1,5 +1,9 @@
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -749,11 +753,137 @@ public class App {
         }
     }
 
+    public static void manipulandoArqTexto() {
+
+        /* Lendo arquivos de texto */
+
+        // File file = new File("D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt");
+        // Scanner sc = null;
+
+        // // Dentro de um bloco try pois pode sair alguma exception
+        // try {
+        //     sc = new Scanner(file);
+        //     while (sc.hasNextLine()) {
+        //         System.out.println(sc.nextLine());
+        //     }
+        // } catch (IOException e) {
+        //     System.out.println(e.getMessage());
+        // } finally {
+        //     if (sc != null) {
+        //         sc.close();
+        //     }
+        // }
+
+
+        // // Outra forma de abrir e fechar os arquivos "muito verboso"
+        // String path = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt";
+        // FileReader fr = null;
+        // BufferedReader br = null;
+        
+        // try {
+        //     //Instanciar um arquivo estabelecendo uma Stream, sequencia de leitura a partir do arquivo
+        //     fr = new FileReader(path);
+        //     //Instanciado a partir de FileReader para deixar mais rapido a leitura do arquivo
+        //     br = new BufferedReader(fr);
+        //     // br = new BufferedReader(new FileReader(path)); //<-- pode ser feita assim tambem
+        //     String line = br.readLine();
+        //     while (line != null) {
+        //         System.out.println(line);
+        //         line = br.readLine();
+        //     }
+        // } catch (IOException e) {
+        //     System.out.println(e.getMessage());
+        // } finally {
+        //     try{
+        //         if (br != null) {
+        //             br.close();
+        //         }
+        //         if (fr != null) {
+        //             fr.close();
+        //         }
+        //     } catch (IOException e) {
+        //         //mostrar a pilha caso haja erros
+        //         e.printStackTrace();
+        //     }
+        // }
+
+        //Forma pratica de abrir e fechar Streams sem ser manualmente
+
+        String path = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line = br.readLine();
+
+            while (line != null) {
+                System.out.println(line);
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        /* Escrevendo arquivos de texto */
+
+        String[] lines = new String[] {"Good morning", "Good afternoon", "Good night"};
+
+        String path_out = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\out.txt";
+
+
+        //try (BufferedWriter bw = new BufferedWriter(new FileWriter(path_out))) {  // <-- Aqui sempre vai recriar o arquivo
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path_out, true))) { //Com o true dará append no arquivo
+            for (String line : lines) {               
+                bw.write(line); // Aqui vai adicionar no final do arquivo
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void manipulandoPastas() {
+        String strPath = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral";
+
+        File path = new File(strPath);
+
+        //abrindo uma pasta e listando os diretórios
+        File[] folders = path.listFiles(File::isDirectory);
+        System.out.println("FOLDERS: ");
+        for (File folder : folders) {
+            System.out.println(folder);
+        }
+
+        //abrindo uma pasta e listando os arquivos
+        File[] files = path.listFiles(File::isFile);
+        for (File file : files) {
+            System.out.println(file);
+        }
+
+        //instanciando um boleano para retornar se foi um sucesso a criação da pasta
+        //criando a pasta
+        boolean success = new File(strPath, "\\teste").mkdir();
+        System.out.println("Directory created? " + success);
+
+
+        //Mostrando caminho dos arquivos
+        String strPath2 = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt";
+
+        File path2 = new File(strPath2);
+
+        //Somente o nome
+        System.out.println(path2.getName());
+        //Somente o caminho sem o nome
+        System.out.println(path2.getParent());
+        //Caminho e nomes completos
+        System.out.println(path2.getPath());
+
+    }
+
     public static void atividade() {
 
     }
 
     public static void main(String[] args) throws Exception {
-        excerptFinnaly();
+        manipulandoPastas();
     }
 }
