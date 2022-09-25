@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -25,8 +26,14 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
+import devices.ComboDevice;
+import devices.ConcretePrinter;
+import devices.ConcreteScanner;
+import entities.AbstractShape;
 import entities.Account;
 import entities.BussinesAccount;
+import entities.CarRental;
+import entities.Circle;
 import entities.Comment;
 import entities.Department;
 import entities.Employee;
@@ -35,11 +42,19 @@ import entities.Order;
 import entities.OutsourcedEmployee;
 import entities.Post;
 import entities.Product;
+import entities.Rectangle;
 import entities.SavingsAccount;
 import entities.Triangle;
+import entities.Vehicle;
 import entities.Worker;
+import entities.WorkingMan;
+import entities.enums.Color;
 import entities.enums.OrderStatus;
 import entities.enums.WorkerLevel;
+import services.BrazilInterestService;
+import services.BrazilTaxService;
+import services.InterestService;
+import services.RentalService;
 import utils.Calculator;
 
 public class App {
@@ -757,57 +772,60 @@ public class App {
 
         /* Lendo arquivos de texto */
 
-        // File file = new File("D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt");
+        // File file = new
+        // File("D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt");
         // Scanner sc = null;
 
         // // Dentro de um bloco try pois pode sair alguma exception
         // try {
-        //     sc = new Scanner(file);
-        //     while (sc.hasNextLine()) {
-        //         System.out.println(sc.nextLine());
-        //     }
-        // } catch (IOException e) {
-        //     System.out.println(e.getMessage());
-        // } finally {
-        //     if (sc != null) {
-        //         sc.close();
-        //     }
+        // sc = new Scanner(file);
+        // while (sc.hasNextLine()) {
+        // System.out.println(sc.nextLine());
         // }
-
+        // } catch (IOException e) {
+        // System.out.println(e.getMessage());
+        // } finally {
+        // if (sc != null) {
+        // sc.close();
+        // }
+        // }
 
         // // Outra forma de abrir e fechar os arquivos "muito verboso"
         // String path = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt";
         // FileReader fr = null;
         // BufferedReader br = null;
-        
+
         // try {
-        //     //Instanciar um arquivo estabelecendo uma Stream, sequencia de leitura a partir do arquivo
-        //     fr = new FileReader(path);
-        //     //Instanciado a partir de FileReader para deixar mais rapido a leitura do arquivo
-        //     br = new BufferedReader(fr);
-        //     // br = new BufferedReader(new FileReader(path)); //<-- pode ser feita assim tambem
-        //     String line = br.readLine();
-        //     while (line != null) {
-        //         System.out.println(line);
-        //         line = br.readLine();
-        //     }
+        // //Instanciar um arquivo estabelecendo uma Stream, sequencia de leitura a
+        // partir do arquivo
+        // fr = new FileReader(path);
+        // //Instanciado a partir de FileReader para deixar mais rapido a leitura do
+        // arquivo
+        // br = new BufferedReader(fr);
+        // // br = new BufferedReader(new FileReader(path)); //<-- pode ser feita assim
+        // tambem
+        // String line = br.readLine();
+        // while (line != null) {
+        // System.out.println(line);
+        // line = br.readLine();
+        // }
         // } catch (IOException e) {
-        //     System.out.println(e.getMessage());
+        // System.out.println(e.getMessage());
         // } finally {
-        //     try{
-        //         if (br != null) {
-        //             br.close();
-        //         }
-        //         if (fr != null) {
-        //             fr.close();
-        //         }
-        //     } catch (IOException e) {
-        //         //mostrar a pilha caso haja erros
-        //         e.printStackTrace();
-        //     }
+        // try{
+        // if (br != null) {
+        // br.close();
+        // }
+        // if (fr != null) {
+        // fr.close();
+        // }
+        // } catch (IOException e) {
+        // //mostrar a pilha caso haja erros
+        // e.printStackTrace();
+        // }
         // }
 
-        //Forma pratica de abrir e fechar Streams sem ser manualmente
+        // Forma pratica de abrir e fechar Streams sem ser manualmente
 
         String path = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt";
 
@@ -824,14 +842,15 @@ public class App {
 
         /* Escrevendo arquivos de texto */
 
-        String[] lines = new String[] {"Good morning", "Good afternoon", "Good night"};
+        String[] lines = new String[] { "Good morning", "Good afternoon", "Good night" };
 
         String path_out = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\out.txt";
 
-
-        //try (BufferedWriter bw = new BufferedWriter(new FileWriter(path_out))) {  // <-- Aqui sempre vai recriar o arquivo
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path_out, true))) { //Com o true dará append no arquivo
-            for (String line : lines) {               
+        // try (BufferedWriter bw = new BufferedWriter(new FileWriter(path_out))) { //
+        // <-- Aqui sempre vai recriar o arquivo
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path_out, true))) { // Com o true dará append no
+                                                                                       // arquivo
+            for (String line : lines) {
                 bw.write(line); // Aqui vai adicionar no final do arquivo
                 bw.newLine();
             }
@@ -846,44 +865,153 @@ public class App {
 
         File path = new File(strPath);
 
-        //abrindo uma pasta e listando os diretórios
+        // abrindo uma pasta e listando os diretórios
         File[] folders = path.listFiles(File::isDirectory);
         System.out.println("FOLDERS: ");
         for (File folder : folders) {
             System.out.println(folder);
         }
 
-        //abrindo uma pasta e listando os arquivos
+        // abrindo uma pasta e listando os arquivos
         File[] files = path.listFiles(File::isFile);
         for (File file : files) {
             System.out.println(file);
         }
 
-        //instanciando um boleano para retornar se foi um sucesso a criação da pasta
-        //criando a pasta
+        // instanciando um boleano para retornar se foi um sucesso a criação da pasta
+        // criando a pasta
         boolean success = new File(strPath, "\\teste").mkdir();
         System.out.println("Directory created? " + success);
 
-
-        //Mostrando caminho dos arquivos
+        // Mostrando caminho dos arquivos
         String strPath2 = "D:\\THEO\\programing\\codigos\\JAVA\\JAVA_geral\\in.txt";
 
         File path2 = new File(strPath2);
 
-        //Somente o nome
+        // Somente o nome
         System.out.println(path2.getName());
-        //Somente o caminho sem o nome
+        // Somente o caminho sem o nome
         System.out.println(path2.getParent());
-        //Caminho e nomes completos
+        // Caminho e nomes completos
         System.out.println(path2.getPath());
 
     }
 
-    public static void atividade() {
+    public static void usandoInterface() throws ParseException {
+        Locale.setDefault(Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        String carModel = "Civic";
+        Date start = sdf.parse("25/06/2018 10:30");
+        Date finish = sdf.parse("25/06/2018 14:40");
+
+        CarRental cr = new CarRental(start, finish, new Vehicle(carModel));
+
+        double pricePerHour = 10.00;
+        double pricePerDay = 130.00;
+
+        // cahamar o BrazilTaxService é uma injeção de dependencia por meio de
+        // construtor (ele é instanciada e injetado por meio do construtor)
+        // Gera um dependencia fraca (Acomplamento fraco, pois se eu colocar para a
+        // classe instanciar o BrazilTaxService,
+        // ela fica dependente da classe BrazilTaxService e fica um forte acomplamento)
+        // Criando uma inversão de controle, removendo da classe RentalService a
+        // responsabilidade de instanciação das suas dependencias
+        RentalService rentalService = new RentalService(pricePerDay, pricePerHour, new BrazilTaxService());
+
+        rentalService.processInvoice(cr);
+
+        System.out.println("INVOICE:");
+        System.out.println("Basic payment: " + String.format("%.2f", cr.getInvoice().getBasicPayment()));
+        System.out.println("Tax: " + String.format("%.2f", cr.getInvoice().getTax()));
+        System.out.println("Total payment: " + String.format("%.2f", cr.getInvoice().getTotalPayment()));
 
     }
 
+    public static void usandoInterfaceClasseAbstrata() {
+        // Usando a interface com a classe abstrata color, usando a interfaçe Shape
+        // temos a obrigatoriedade de implementar o metodo area()
+        AbstractShape s1 = new Circle(Color.BLACK, 2.0);
+        AbstractShape s2 = new Rectangle(Color.WHITE, 3.0, 4.0);
+
+        System.out.println("Circle color: " + s1.getColor());
+        System.out.println("Circle area: " + String.format("%.3f", s1.area()));
+        System.out.println("Rectangle color: " + s2.getColor());
+        System.out.println("Rectangle area: " + String.format("%.3f", s2.area()));
+
+    }
+
+    public static void problemaDoDiamante() {
+
+        // Resolvendo o problema da herança multipla que não é permitirdo antes do java
+        // 8
+        // Usando interface para resolver o problema do diamante através da criação de
+        // uma classe abstrata e interfaces para instaciar varios devices
+
+        ConcretePrinter p = new ConcretePrinter("1080");
+        p.processDoc("My Letter");
+        p.print("My Letter");
+
+        System.out.println();
+        ConcreteScanner s = new ConcreteScanner("2003");
+        s.processDoc("My Email");
+        System.out.println("Scan result: " + s.scan());
+
+        System.out.println();
+        ComboDevice c = new ComboDevice("2081");
+        c.processDoc("My dissertation");
+        c.print("My dissertation");
+        System.out.println("Scan result: " + c.scan());
+    }
+
+    public static void interfaceComparable() {
+        // implementação da interface comparable para ordenar a lista
+        // após a implementação da interface, é necessário implementar o metodo
+        // compareTo
+        // para que a lista seja ordenada
+        // transformando em um tipo de lista comparável
+
+        List<WorkingMan> list = new ArrayList<>();
+        String path = "D:\\THEO\\programing\\codigos\\Z_estudos_testes\\JAVA_geral\\in.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String workinkManCSV = br.readLine();
+            while (workinkManCSV != null) {
+                String[] fields = workinkManCSV.split(",");
+                list.add(new WorkingMan(fields[0], Double.parseDouble(fields[1])));
+                workinkManCSV = br.readLine();
+            }
+            Collections.sort(list);
+            for (WorkingMan s : list) {
+                System.out.println(s.getName() + ", " + s.getSalary());
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public static void defaulMethods() {
+        // desde o java 8, é possivel implementar metodos na interface
+        // herdando valores e tendo herança multipla já que o métodos está na interface
+        // para evitar repetição de código utilizamos o defaul na interface para chamada
+        // do pagamento
+        Locale.setDefault(Locale.US);
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Amount: ");
+        double amount = sc.nextDouble();
+        System.out.print("Months: ");
+        int months = sc.nextInt();
+
+        InterestService is = new BrazilInterestService(2.0);
+        double payment = is.payment(amount, months);
+
+        System.out.println("Payment after " + months + " months:");
+        System.out.println(String.format("%.2f", payment));
+
+        sc.close();
+    }
+
     public static void main(String[] args) throws Exception {
-        manipulandoPastas();
+        defaulMethods();
     }
 }
