@@ -20,11 +20,16 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import devices.ComboDevice;
@@ -41,11 +46,13 @@ import entities.Comment;
 import entities.Department;
 import entities.Employee;
 import entities.HourContract;
+import entities.LogEntry;
 import entities.Order;
 import entities.OutsourcedEmployee;
 import entities.Post;
 import entities.Product;
 import entities.ProductGenerics;
+import entities.ProductSet;
 import entities.Rectangle;
 import entities.RectangleCuringa;
 import entities.SavingsAccount;
@@ -1154,38 +1161,154 @@ public class App {
         String a = "Maria";
         String b = "Alex";
 
-        //hash code mais rapido devido a mostrar o numero de memoria do objeto
+        // hash code mais rapido devido a mostrar o numero de memoria do objeto
         System.out.println(a.hashCode());
         System.out.println(b.hashCode());
 
-        //equals mais lento devido a comparar os dados do objeto
+        // equals mais lento devido a comparar os dados do objeto
         System.out.println(a.equals(a));
 
-        //criando um hashCode personalizado
+        // criando um hashCode personalizado
         ClientHashCode client1 = new ClientHashCode("Maria", "maria@email.com");
         ClientHashCode client2 = new ClientHashCode("Maria", "maria@email.com");
 
         System.out.println(client1.hashCode());
         System.out.println(client2.hashCode());
 
-        //Se eu usar o equals ele mostra true devido a comparação dos dados do objeto
+        // Se eu usar o equals ele mostra true devido a comparação dos dados do objeto
         System.out.println(client1.equals(client2));
 
-        //Se eu usar == ele mostra false devido ao heap de memoria da instanciação serem diferentes
+        // Se eu usar == ele mostra false devido ao heap de memoria da instanciação
+        // serem diferentes
         System.out.println(client1 == client2);
 
-        //Qual a experessão literal o compilador trata e retorna corretamente no uso do ==
+        // Qual a experessão literal o compilador trata e retorna corretamente no uso do
+        // ==
         String s1 = "Maria";
         String s2 = "Maria";
         System.out.println(s1 == s2);
 
-        //porem se eu instanciar ele deixa de usar o == e passa a usar o equals
+        // porem se eu instanciar ele deixa de usar o == e passa a usar o equals
         String s3 = new String("Maria");
         String s4 = new String("Maria");
         System.out.println(s3 == s4);
     }
 
+    public static void usingSet() {
+
+        // HashSet - mais rápido (operações O(1) em tabela hash) e não ordenado
+        // TreeSet - mais lento (operações O(log(n)) em árvore rubro-negra) e ordenado
+        // pelo compareTo do objeto (ou Comparator)
+        // LinkedHashSet - velocidade intermediária e elementos na ordem em que são
+        // adicionado
+
+        // EXEMPLO com HashSet
+        Set<String> set = new HashSet<>();
+        set.add("TV");
+        set.add("Notebook");
+        set.add("Tablet");
+        System.out.println(set.contains("Notebook"));
+        set.remove("Notebook");
+        for (String p : set) {
+            System.out.println(p);
+        }
+        System.out.println(set.size());
+        set.add("Notebook");
+        set.removeIf(filter -> filter.charAt(0) == 'T');
+        for (String p : set) {
+            System.out.println(p);
+        }
+
+        // EXEMPLO de operadores com TreeSet
+        Set<Integer> a = new TreeSet<>(Arrays.asList(0, 2, 4, 5, 6, 8, 10));
+        Set<Integer> b = new TreeSet<>(Arrays.asList(5, 6, 7, 8, 9, 10));
+        // union
+        Set<Integer> c = new TreeSet<>(a);
+        c.addAll(b);
+        System.out.println(c);
+        // intersection
+        Set<Integer> d = new TreeSet<>(a);
+        d.retainAll(b);
+        System.out.println(d);
+        // difference
+        Set<Integer> e = new TreeSet<>(a);
+        e.removeAll(b);
+        System.out.println(e);
+    }
+
+    public static void usingSetIgualdadeAndComparable() {
+        Set<ProductSet> set = new HashSet<>();
+        set.add(new ProductSet("TV", 5));
+        set.add(new ProductSet("Notebook", 8));
+        set.add(new ProductSet("Tablet", 20));
+        ProductSet prod = new ProductSet("Notebook", 8);
+        // Se eu comparar sem existir o equals e o hashCode ele vai comparar a
+        // referencia de memoria
+        // e vai retornar false
+        System.out.println(set.contains(prod));
+
+        // Criando um toString para facilitar visualização dos dados
+        Set<ProductSet> setTree = new TreeSet<>();
+        // Vai gerar erro (Caso não tenha o comparable) pois não implementamos o
+        // comparable
+        // O treeSet usa o comparable para ordenar os dados na hora da visualização
+        // Após implementado ele roda normal
+        setTree.add(new ProductSet("TV", 5));
+        setTree.add(new ProductSet("Notebook", 8));
+        setTree.add(new ProductSet("Tablet", 20));
+        for (ProductSet p : set) {
+            System.out.println(p);
+        }
+
+    }
+
+    public static void countinUniquesSet() {
+        Scanner sc = new Scanner(System.in);
+
+        String path = "D:\\THEO\\programing\\codigos\\Z_estudos_testes\\JAVA_geral\\logData.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+
+            Set<LogEntry> set = new HashSet<>();
+
+            String line = br.readLine();
+            while (line != null) {
+
+                String[] fields = line.split(" ");
+                String username = fields[0];
+                Date moment = Date.from(Instant.parse(fields[1]));
+
+                set.add(new LogEntry(username, moment));
+
+                line = br.readLine();
+            }
+            System.out.println("Total users: " + set.size());
+
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        sc.close();
+    }
+
+    public static void usingMap() {
+        Map<String, String> cookies = new TreeMap<>();
+        cookies.put("username", "maria");
+        cookies.put("email", "maria@gmail.com");
+        cookies.put("phone", "99771122");
+        cookies.remove("email");
+        //Sobrescreve o valor anterior pois o Map não aceita repetição de chave
+        cookies.put("phone", "99771133");
+        System.out.println("Contains 'phone' key: " + cookies.containsKey("phone"));
+        System.out.println("Phone number: " + cookies.get("phone"));
+        System.out.println("Email: " + cookies.get("email"));
+        System.out.println("Size: " + cookies.size());
+        System.out.println("ALL COOKIES:");
+        for (String key : cookies.keySet()) {
+            System.out.println(key + ": " + cookies.get(key));
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        usingHashCodeAndEquals();
+        usingMap();
     }
 }
