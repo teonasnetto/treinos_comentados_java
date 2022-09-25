@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -34,6 +35,8 @@ import entities.Account;
 import entities.BussinesAccount;
 import entities.CarRental;
 import entities.Circle;
+import entities.CircleCuringa;
+import entities.ClientHashCode;
 import entities.Comment;
 import entities.Department;
 import entities.Employee;
@@ -42,8 +45,11 @@ import entities.Order;
 import entities.OutsourcedEmployee;
 import entities.Post;
 import entities.Product;
+import entities.ProductGenerics;
 import entities.Rectangle;
+import entities.RectangleCuringa;
 import entities.SavingsAccount;
+import entities.ShapeCuringa;
 import entities.Triangle;
 import entities.Vehicle;
 import entities.Worker;
@@ -53,7 +59,9 @@ import entities.enums.OrderStatus;
 import entities.enums.WorkerLevel;
 import services.BrazilInterestService;
 import services.BrazilTaxService;
+import services.CalculationService;
 import services.InterestService;
+import services.PrintService;
 import services.RentalService;
 import utils.Calculator;
 
@@ -1011,7 +1019,173 @@ public class App {
         sc.close();
     }
 
+    public static void usginGenerics() {
+
+        // usando generics para criar uma lista de objetos
+
+        Scanner sc = new Scanner(System.in);
+
+        PrintService<Integer> ps = new PrintService<>();
+
+        System.out.print("How many values? ");
+        int n = sc.nextInt();
+
+        for (int i = 0; i < n; i++) {
+            Integer value = sc.nextInt();
+            ps.addValue(value);
+        }
+
+        ps.print();
+        Integer x = ps.first();
+        System.out.println("First: " + x);
+
+        sc.close();
+    }
+
+    public static void usginGenericsComparable() {
+        // usando generics para criar uma lista de objetos
+        // usando a interface comparable para ordenar a lista
+        // após a implementação da interface, é necessário implementar o metodo
+        // compareTo
+        // para que a lista seja ordenada
+        // transformando em um tipo de lista comparável
+        Locale.setDefault(Locale.US);
+
+        List<ProductGenerics> list = new ArrayList<>();
+
+        String path = "D:\\THEO\\programing\\codigos\\Z_estudos_testes\\JAVA_geral\\data.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+
+            String line = br.readLine();
+            while (line != null) {
+                String[] fields = line.split(",");
+                list.add(new ProductGenerics(fields[0], Double.parseDouble(fields[1])));
+                line = br.readLine();
+            }
+
+            ProductGenerics x = CalculationService.max(list);
+            System.out.println("Most expensive:");
+            System.out.println(x);
+
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public static void usginCuringas1() {
+        List<Integer> myInts = Arrays.asList(5, 2, 10);
+        printCuringas(myInts);
+
+        List<String> myStrs = Arrays.asList("alo", "bom", "dia");
+        printCuringas(myStrs);
+    }
+
+    public static void printCuringas(List<?> list) {
+        // criando uma coleção de dados do tipo curinga
+        // o tipo curinga é um tipo que aceita qualquer tipo de dado
+        // o curinga é representado pelo simbolo "?"
+        // porém o tipo curinga não aceita adicionar dados na lista
+
+        for (Object obj : list) {
+            System.out.println(obj);
+        }
+
+    }
+
+    public static void usginCuringas2() {
+        List<ShapeCuringa> myShapes = new ArrayList<>();
+        myShapes.add(new RectangleCuringa(3.0, 2.0));
+        myShapes.add(new CircleCuringa(2.0));
+
+        List<CircleCuringa> myCircles = new ArrayList<>();
+        myCircles.add(new CircleCuringa(2.0));
+        myCircles.add(new CircleCuringa(3.0));
+
+        System.out.println("Total area: " + totalAreaCuringa(myCircles));
+    }
+
+    public static double totalAreaCuringa(List<? extends ShapeCuringa> list) {
+        // Passando que a lista é do tipo curinga e que o tipo curinga é do tipo
+        // ShapeCuringa
+        // Assim pode ser passado qualquer tipo de lista que herde de ShapeCuringa
+        // Então a lista pode ser do tipo CircleCuringa ou RectangleCuringa
+        double sum = 0.0;
+        for (ShapeCuringa s : list) {
+            sum += s.area();
+        }
+        return sum;
+    }
+
+    public static void usginCuringas3() {
+        List<Integer> myInts = Arrays.asList(1, 2, 3, 4);
+        List<Double> myDoubles = Arrays.asList(3.14, 6.28);
+        List<String> myStrings = Arrays.asList("sim", "não");
+        List<Object> myObjs = new ArrayList<Object>();
+        // usando o curinga para adicionar dados na lista
+        copyCuringasObjects(myInts, myObjs);
+        // usando uma lista curinga para ler qualquer tipo de lista e dados da lista
+        printCuringas(myObjs);
+        copyCuringasObjects(myDoubles, myObjs);
+        printCuringas(myObjs);
+        copyCuringasObjects(myStrings, myObjs);
+        printCuringas(myObjs);
+
+    }
+
+    public static void copyCuringasNumber(List<? extends Object> source, List<? super Object> destiny) {
+        for (Object number : source) {
+            destiny.add(number);
+        }
+    }
+
+    public static void copyCuringasObjects(List<? extends Object> source, List<? super Object> destiny) {
+        // usando a covariancia para ler os dados da lista
+        // usando a contra variância para passar uma lista de qualquer tipo de dado
+        // para a lista de destino
+        // assim posso adiciona qualquer tipo de dado na lista de destino
+        for (Object number : source) {
+            destiny.add(number);
+        }
+    }
+
+    public static void usingHashCodeAndEquals() {
+        // usando o metodo hashCode e equals para comparar objetos
+        String a = "Maria";
+        String b = "Alex";
+
+        //hash code mais rapido devido a mostrar o numero de memoria do objeto
+        System.out.println(a.hashCode());
+        System.out.println(b.hashCode());
+
+        //equals mais lento devido a comparar os dados do objeto
+        System.out.println(a.equals(a));
+
+        //criando um hashCode personalizado
+        ClientHashCode client1 = new ClientHashCode("Maria", "maria@email.com");
+        ClientHashCode client2 = new ClientHashCode("Maria", "maria@email.com");
+
+        System.out.println(client1.hashCode());
+        System.out.println(client2.hashCode());
+
+        //Se eu usar o equals ele mostra true devido a comparação dos dados do objeto
+        System.out.println(client1.equals(client2));
+
+        //Se eu usar == ele mostra false devido ao heap de memoria da instanciação serem diferentes
+        System.out.println(client1 == client2);
+
+        //Qual a experessão literal o compilador trata e retorna corretamente no uso do ==
+        String s1 = "Maria";
+        String s2 = "Maria";
+        System.out.println(s1 == s2);
+
+        //porem se eu instanciar ele deixa de usar o == e passa a usar o equals
+        String s3 = new String("Maria");
+        String s4 = new String("Maria");
+        System.out.println(s3 == s4);
+    }
+
     public static void main(String[] args) throws Exception {
-        defaulMethods();
+        usingHashCodeAndEquals();
     }
 }
