@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import devices.ComboDevice;
 import devices.ConcretePrinter;
@@ -51,6 +52,7 @@ import entities.Order;
 import entities.OutsourcedEmployee;
 import entities.Post;
 import entities.Product;
+import entities.ProductComparator;
 import entities.ProductGenerics;
 import entities.ProductSet;
 import entities.Rectangle;
@@ -69,6 +71,7 @@ import services.BrazilTaxService;
 import services.CalculationService;
 import services.InterestService;
 import services.PrintService;
+import services.ProductService;
 import services.RentalService;
 import utils.Calculator;
 
@@ -1308,7 +1311,184 @@ public class App {
         }
     }
 
+    public static void usingComparator() {
+        //Usando uma interface funcional abstrata () para ordenar
+        List<ProductComparator> list = new ArrayList<>();
+        list.add(new ProductComparator("TV", 5.0));
+        list.add(new ProductComparator("Notebook", 8.0));
+        list.add(new ProductComparator("Tablet", 20.0));
+
+        //Caso for usar precisa importar o java.util.Comparator e o entities.ProductComparator
+
+        // list.sort(new MyProductComparator()); //<- primeira forma de usar o comparator
+
+        //Usando uma expressão anonima para ordenar com o Comparator do java.util
+        //Forma muito verbosa de usar o comparator
+        // Comparator<ProductComparator> comp = new Comparator<ProductComparator>() {
+        //     @Override
+        //     public int compare(ProductComparator p1, ProductComparator p2) {
+        //         return p1.getName().toUpperCase().compareTo(p2.getName().toUpperCase());
+        //     }
+        // };
+
+        // //Por ser muito verboso utilizamos função lambda com o Comparator do java.util
+        // Comparator<ProductComparator> comp = (p1, p2) -> { return p1.getName().toUpperCase().compareTo(p2.getName().toUpperCase());};
+        //Pode usar de uma forma mais simples sem precisar das chaves e do return
+        // Comparator<ProductComparator> comp = (p1, p2) -> p1.getName().toUpperCase().compareTo(p2.getName().toUpperCase());
+
+        // list.sort(comp);
+
+        //Para simplificar mais ainda usa uma expressão sem precisar criar uma variavel, a função lambda é passada diretamente
+        list.sort((p1, p2) -> p1.getName().toUpperCase().compareTo(p2.getName().toUpperCase()));
+
+        for (ProductComparator p : list) {
+            System.out.println(p);
+        }
+    }
+
+    public static void usingPredicate() {
+
+        List<ProductComparator> list = new ArrayList<>();
+        list.add(new ProductComparator("TV", 5.0));
+        list.add(new ProductComparator("Notebook", 8.0));
+        list.add(new ProductComparator("Tablet", 20.0));
+
+        // list.removeIf(new ProductPredicate()); //<- forma de usar o predicate com implementação da interface
+
+        // list.removeIf(ProductComparator::staticProductPredicate); //<- forma de usar o predicate método estático
+        
+        // list.removeIf(ProductComparator::nonStaticProductPredicate); //<- forma de usar o predicate método não estático
+        
+        /*forma de usar o predicate expressão lambda declarada
+        double min = 10.0
+        // da de usar o min ou passaar o numero direto no min
+        Predicate<ProductComparator> pred = p -> p.getPrice() >= min; 
+        list.removeIf(pred); 
+        */
+
+        list.removeIf(p -> p.getPrice() >= 10.0); //<- forma de usar o predicate inline
+
+        for (ProductComparator p : list) {
+            System.out.println(p);
+        }
+
+    }
+
+    public static void usingConsumer() {
+        List<ProductComparator> list = new ArrayList<>();
+        list.add(new ProductComparator("TV", 5.0));
+        list.add(new ProductComparator("Notebook", 8.0));
+        list.add(new ProductComparator("Tablet", 20.0));
+
+        // list.forEach(new ProductConsumer()); //<- forma de usar o consumer com implementação da interface
+
+        // list.forEach(ProductComparator::nonStaticProductConsumer); //<- forma de usar o consumer método não estático
+        
+        // list.forEach(ProductComparator::staticProductConsumer); //<- forma de usar o consumer método estático
+        
+        /*forma de usar o consumer expressão lambda declarada
+        double factor = 1.1;
+        // da de usar o factor ou passaar o numero direto no factor
+        Consumer<ProductComparator> cons = p -> p.setPrice(p.getPrice() * factor); 
+        list.forEach(cons); 
+        */
+
+        list.forEach(p -> p.setPrice(p.getPrice() * 1.1)); //<- forma de usar o consumer inline
+
+        //Forma de iterar sobre a lista
+        // for (ProductComparator p : list) {
+        //     System.out.println(p);
+        // }
+
+        //Forma de iterar usando o forEach usando reference method ao println
+        list.forEach(System.out::println);
+    }
+
+    public static void usingFunction() {
+        List<ProductComparator> list = new ArrayList<>();
+        list.add(new ProductComparator("Tv", 5.0));
+        list.add(new ProductComparator("Notebook", 8.0));
+        list.add(new ProductComparator("Tablet", 20.0));
+        
+        //convertendo para formato stram para poder usar o map
+        //usando a função map para transformar cada elemento da lista na função pedida
+        //usando collect para retornar a stream para uma lista
+        // List<String> names = list.stream().map(new ProductFunction()).collect(Collectors.toList()); //<- forma de usar o function com implementação da interface
+        // names.forEach(System.out::println);
+
+        // List<String> names = list.stream().map(ProductComparator::staticProductFunction).collect(Collectors.toList()); //<- <- forma de usar o function método não estático
+        // names.forEach(System.out::println);
+
+        // List<String> names = list.stream().map(ProductComparator::nonStaticProductFunction).collect(Collectors.toList()); //<- <- forma de usar o function método não estático
+        // names.forEach(System.out::println);
+
+        /*forma de usar o function expressão lambda declarada
+        Function<ProductComparator, String> func = p -> p.getName().toUpperCase(); 
+        List<String> names = list.stream().map(func).collect(Collectors.toList()); //<- <- forma de usar o function método não estático
+        names.forEach(System.out::println);
+        */
+
+        List<String> names = list.stream().map(p -> p.getName().toUpperCase()).collect(Collectors.toList()); //<- forma de usar o function inline
+        names.forEach(System.out::println);
+    }
+
+    public static void creatingFunctionThatUseFunction() {
+        List<ProductComparator> list = new ArrayList<>();
+        list.add(new ProductComparator("Tv", 5.0));
+        list.add(new ProductComparator("Notebook", 8.0));
+        list.add(new ProductComparator("Tablet", 20.0));
+
+        //Criando uma função que recebe uma função como parametro
+
+        ProductService ps = new ProductService();
+
+        // double sum = ps.filteredSum(list); <- forma de usar a função comentada no ProductService
+
+        double sum = ps.filteredSum(list, p -> p.getPrice() < 10.0); //<- forma de usar a função inline
+
+        System.out.println("Sum = " + String.format("%.2f", sum));
+    }
+
+    public static void usingStream() {
+        List<Integer> list = Arrays.asList(3, 4, 5, 10, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+
+        //Criando uma stream a partir de uma coleção
+        // Stream<Integer> st1 = list.stream();
+        //Criando uma stream a partir de uma coleção usando map
+        Stream<Integer> st1 = list.stream().map(x -> x * 10);
+        //Impriminto a stream
+        System.out.println(Arrays.toString(st1.toArray()));
+
+        //Criando uma stream diretamente
+        Stream<String> st2 = Stream.of("Maria", "Alex", "Bob");
+        System.out.println(Arrays.toString(st2.toArray()));
+
+        //Criando uma stream através de uma função de iteração
+        Stream<Integer> st3 = Stream.iterate(0, x -> x + 5);
+        //Mostrando somente 10 elementos da stream devido a ser infinita
+        System.out.println(Arrays.toString(st3.limit(15).toArray()));
+
+        //Criando uma stream através da sequencia de fibonacci
+        Stream<Long> st4 = Stream.iterate(new Long[] { 0L, 1L }, p -> new Long[] { p[1], p[0] + p[1] }).map(p -> p[0]);
+        System.out.println(Arrays.toString(st4.limit(15).toArray()));
+    }
+
+    public static void usingStreamPipelines() {
+        List<Integer> list = Arrays.asList(3, 4, 5, 10, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+        Stream<Integer> st1 = list.stream().map(x -> x * 10);
+        //toArray é uma operação terminal
+        System.out.println(Arrays.toString(st1.toArray()));
+
+        //Gerando o somatorio dos elementos da lista
+        int sum = list.stream().reduce(0, (x, y) -> x + y);
+
+        System.out.println("Sum = " + sum);
+
+        //criando uma stream a partir da lista "list" e filtrando os elementos pares, depois multiplicando por 10 e logo após transformando em uma lista
+        List<Integer> newList = list.stream().filter(x -> x % 2 == 0).map(x -> x * 10).collect(Collectors.toList());
+        System.out.println(Arrays.toString(newList.toArray()));
+    }
     public static void main(String[] args) throws Exception {
-        usingMap();
+        usingStreamPipelines();
     }
 }
